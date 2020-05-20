@@ -15,6 +15,7 @@ import os
 import pandas as pd
 from sqlalchemy import create_engine
 import re
+import baseClass
 
 
 def trans_time(df_s_ele, date_str):
@@ -31,17 +32,8 @@ def trans_time(df_s_ele, date_str):
 
 
 class DNATR:
-    ftp_host = ''
-    ftp_usr = ''
-    ftp_psd = ''
-
-    db_driver = ''
-    db_usr = ''
-    db_psd = ''
-    db_host = ''
-    db_port = ''
-    db_name = ''
-    engine_all_para = ''
+    ftp = baseClass.FtpInfo()
+    db = baseClass.SqlInfo()
 
     today_ftp_file = ''
     today_local_file = ''
@@ -49,7 +41,7 @@ class DNATR:
 
     ftp_path = ''
     local_path = ''
-    # 仪器编号
+    # 仪器编号str
     ins_num = ''
 
     def __init__(self, ins_num='01', local_path='/test_data/'):
@@ -57,8 +49,6 @@ class DNATR:
         self.set_ins_num(ins_num)
         self.set_path(local_path)
         self.set_file_name()
-        self.set_ftp_profile()
-        self.set_db_profile()
 
     def save_all_mysql_force(self):
         """
@@ -72,7 +62,7 @@ class DNATR:
         比较执行将所有的文件下载并且保存至mysql
         :return:
         """
-        db_engine = create_engine(self.engine_all_para)
+        db_engine = create_engine(self.db.engine_all_para)
         # 查询得到所有表格，并且加上文件后缀.csv
         q = db_engine.execute('SHOW TABLES')
         q_res = q.fetchall()
@@ -94,7 +84,7 @@ class DNATR:
         :return:
         """
 
-        db_engine = create_engine(self.engine_all_para)
+        db_engine = create_engine(self.db.engine_all_para)
         # 取得table_name = DN_ATR01_20200510这样的结果
         file_name = os.path.basename(self.today_local_file_abs)
         table_name = os.path.splitext(file_name)[0]
@@ -108,7 +98,7 @@ class DNATR:
         比较本地的文件名，从FTP上同步文件
         :return:None
         """
-        with ftplib.FTP(host=self.ftp_host, user=self.ftp_usr, passwd=self.ftp_psd) as ftp:
+        with ftplib.FTP(host=self.ftp.ftp_host, user=self.ftp.ftp_usr, passwd=self.ftp.ftp_psd) as ftp:
             ftp_file_list = map(lambda x: self.get_local_file_name(x), ftp.nlst(self.ftp_path))
             ftp_file_set = set(ftp_file_list)
             local_file_list = set(filter(lambda x: re.match('.*.csv', x) is not None, os.listdir(self.local_path)))
@@ -116,7 +106,7 @@ class DNATR:
             for local_file_name in dwn_file_set:  # DN_ATR01_20200510.csv这样的结果
                 ftp_file_name = local_file_name.split('_')[-1]
                 self.get_file_from_ftp(self.ftp_path, ftp_file_name, self.local_path, local_file_name)
-                print("get{}".format(local_file_name))
+                print("get{}".format(local_file_name)) # 获取的文件
 
     def get_today_file_from_01(self):
         """
@@ -135,7 +125,7 @@ class DNATR:
         :return:None，下载文件到本地,ftp到local
         """
         new_local_file = path_local + file_local
-        with ftplib.FTP(host=self.ftp_host, user=self.ftp_usr, passwd=self.ftp_psd) as ftp:
+        with ftplib.FTP(host=self.ftp.ftp_host, user=self.ftp.ftp_usr, passwd=self.ftp.ftp_psd) as ftp:
             try:
                 ftp.cwd(path_ftp)
                 buf_size = 1024
@@ -157,29 +147,6 @@ class DNATR:
         self.local_path = local_path
         self.ftp_path = "ATR{}/".format(self.ins_num)
 
-    def set_ftp_profile(self, host='202.127.202.6', usr='RADCALNET', psd='1Q2W3E4R'):
-        """
-        设置ftp服务器登录参数
-        :param host:数据库地址，输入服务器所在公网地址即可
-        :param usr:用户
-        :param psd:密码
-        :return:
-        """
-        self.ftp_host = host
-        self.ftp_usr = usr
-        self.ftp_psd = psd
-
-    def set_db_profile(self, db_driver='mysql+mysqlconnector', db_usr='root', db_psd='1q2w3e4r', db_host='118.31.70.60',
-                       db_port='3306',
-                       db_name='Level0'):
-        self.db_driver = db_driver
-        self.db_usr = db_usr
-        self.db_psd = db_psd
-        self.db_host = db_host
-        self.db_port = db_port
-        self.db_name = db_name
-        self.engine_all_para = db_driver + '://' + db_usr + ':' + db_psd + '@' + db_host + ':' + db_port + '/' + db_name
-
     def set_file_name(self):
         time_str = datetime.datetime.now().strftime("%Y%m%d")
         self.today_ftp_file = time_str + '.csv'
@@ -190,10 +157,10 @@ class DNATR:
 def main():
     # unit test
     dn_atr = DNATR()
-    dn_atr.get_all_file()
-    dn_atr.save_all_mysql()
-    # dn_atr.get_today_file_from_01()
-    # dn_atr.save_today_mysql()
+    # dn_atr.get_all_file()
+    # dn_atr.save_all_mysql()
+    dn_atr.get_today_file_from_01()
+    dn_atr.save_today_mysql()
     # pass
 
 

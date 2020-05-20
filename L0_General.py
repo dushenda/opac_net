@@ -17,14 +17,29 @@
                     ATR_RSR_25.csv	2.5nm通道响应
 """
 
+from sqlalchemy import create_engine
+import pandas as pd
+
+
+
+
 
 class GenePara:
-    def set_ATR_cali(self):
-        pass
+    def tosql_ATR_cali(self, ATR_cali):
+        '''
+
+        :param ATR_cali: 字典，输入ATR仪器的定标系数，按月为单位
+        :return:
+        '''
+        db_engine = create_engine(self.engine_all_para)
+
+    def tosql_ATR_cali_from_csv(self, path):
+        df = pd.read_csv(path)
 
 
 def main():
-    print("465+")
+    a = SqlInfo()
+    print(a)
 
 
 if __name__ == '__main__':

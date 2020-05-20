@@ -7,7 +7,8 @@ what：自动化定标系统后端
 
 how：
 - C++、Python语言编写的处理数据的部分
-- 使用MySQl数据库
+- 使用MySQL数据库
+- 使用SWIG嵌入脚本
 
 why：自动化处理定标数据
 
@@ -15,7 +16,7 @@ why：自动化处理定标数据
 
 ### Level0
 
-Level0为数据获取、读取、设置部分
+Level0为数据获取、读取、设置部分，Python实现
 
 1. [L0_General](./doc/L0_General.md)，获取一般数据，仪器定标系数
 2. [L0_ATR](./doc/L0_ATR.md)，获取ATR仪器的DN值
@@ -26,4 +27,4 @@ Level0为数据获取、读取、设置部分
 
 ## Level1
 
-Level1为数据的第一步处理过程
+Level1为数据的第一步处理过程，C++11实现

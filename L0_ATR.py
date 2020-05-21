@@ -15,7 +15,8 @@ import os
 import pandas as pd
 from sqlalchemy import create_engine
 import re
-import baseClass
+
+import baseclass
 
 
 def trans_time(df_s_ele, date_str):
@@ -32,8 +33,8 @@ def trans_time(df_s_ele, date_str):
 
 
 class DNATR:
-    ftp = baseClass.FtpInfo()
-    db = baseClass.SqlInfo()
+    ftp = baseclass.FtpInfo()
+    db = baseclass.SqlInfo()
 
     today_ftp_file = ''
     today_local_file = ''

@@ -4,7 +4,7 @@
 """
 @ide        : PyCharm
 @project    : FTPTest
-@file       : baseClass.py
+@file       : baseclass.py
 @author     : CALIBRATION
 @time       : 2020/5/20 18:03
 @description: None

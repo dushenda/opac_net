@@ -3,14 +3,18 @@
 [![](https://img.shields.io/badge/sponsor-KLOCC-red)](http://klocc.aiofm.ac.cn/sysjj/sysjj/)
 ![](https://img.shields.io/badge/team-software-brightgreen)
 
-what：自动化定标系统后端
+what：自动化定标系统
 
 how：
-- C++、Python语言编写的处理数据的部分
-- 使用MySQL数据库
-- 使用SWIG嵌入脚本
+- C++处理数据的部分
+- Python完成网络编程部分（爬虫和数据同步）
+- 使用Python SQL Alchemy + MySQL完成数据库
+- 使用C++ Qt GUI QtQuick完成客户端软件编写
+- 使用SWIG嵌入脚本（+）
+- web显示数据（+）
+- 移动端Kotlin Android开发（+）
 
-why：自动化处理定标数据
+why：自动化处理定标数据，使得仪器数据处理的高效，可靠，实时性强
 
 ## section
 

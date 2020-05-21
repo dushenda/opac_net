@@ -27,6 +27,9 @@ import basefun
 class GenePara:
     db = baseclass.SqlInfo(db_name='General')
 
+    def __str__(self):
+        return "class General\ncali(ATR,PSR),BRDF,Ref,RSR set&get"
+
     def tosql_cali(self, df, table_name):
         """
 
@@ -56,18 +59,24 @@ class GenePara:
     def tosql_Ref_from_csv(self, path):
         table_name = "ReferenceReflectance"
         df = pd.read_csv(path)
-        db_engine = create_engine(self.db.engine_all_para)
-        df.to_sql(name=table_name, con=db_engine, if_exists="replace", index=False)
+        self.tosql_cali(df, table_name)
 
     def tosql_RSR_from_csv(self, path, table_name):
-        pass
+        df = pd.read_csv(path)
+        self.tosql_cali(df, table_name)
+
 
 
 def main():
     g = GenePara()
-    path = "./example/Ref/ReferenceReflectance.csv"
-    # table_name = "201901BRDF_Model"
-    g.tosql_Ref_from_csv(path)
+    print(g)
+    # read RSR to db
+    # import os
+    # path = "./example/RSR/"
+    # path_list = os.listdir(path)
+    # for filename in path_list:
+    #     table_name = filename.split(".")[0]
+    #     g.tosql_RSR_from_csv(path+filename, table_name)
 
 
 if __name__ == '__main__':

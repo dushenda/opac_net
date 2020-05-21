@@ -19,27 +19,35 @@
 
 from sqlalchemy import create_engine
 import pandas as pd
-
-
-
+import baseClass
 
 
 class GenePara:
-    def tosql_ATR_cali(self, ATR_cali):
+    db = baseClass.SqlInfo(db_name='General')
+
+    def tosql_ATR_cali(self, df):
         '''
 
-        :param ATR_cali: 字典，输入ATR仪器的定标系数，按月为单位
+        :param df:pandas DataFrame
         :return:
         '''
-        db_engine = create_engine(self.engine_all_para)
+        db_engine = create_engine(self.db.engine_all_para)
+        print(self.db)
+        table_name = "222"
+        df.to_sql(name=table_name, con=db_engine, if_exists="replace", index=False)
 
     def tosql_ATR_cali_from_csv(self, path):
         df = pd.read_csv(path)
+        band_num = range(1,9)
+        df.insert(loc=0, column="band_num", value=band_num)
+        self.tosql_ATR_cali(df)
+        print(df)
 
 
 def main():
-    a = SqlInfo()
-    print(a)
+    g = GenePara()
+    path = "./example/cali_factor/ATR2019.csv"
+    g.tosql_ATR_cali_from_csv(path)
 
 
 if __name__ == '__main__':

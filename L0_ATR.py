@@ -33,9 +33,6 @@ def trans_time(df_s_ele, date_str):
 
 
 class DNATR:
-    ftp = baseclass.FtpInfo()
-    db = baseclass.SqlInfo()
-
     today_ftp_file = ''
     today_local_file = ''
     today_local_file_abs = ''
@@ -47,20 +44,31 @@ class DNATR:
 
     def __init__(self, ins_num='01', local_path='/test_data/'):
         # ins_num为仪器编号
+        self.ftp = baseclass.FtpInfo()
+        self.db = baseclass.SqlInfo()
         self.set_ins_num(ins_num)
         self.set_path(local_path)
         self.set_file_name()
 
+    # 保存至MySQL，分为强制更新和比较更新两种force&cmp，使用函数为save_mysql_all
     def save_all_mysql_force(self):
         """
         强制更新将所有的文件下载并且保存至mysql
         :return:
         """
-        pass
+        self.save_all_mysql("replace")
 
-    def save_all_mysql(self):
+    def save_all_mysql_cmp(self):
         """
-        比较执行将所有的文件下载并且保存至mysql
+        比较更新文件
+        :return:
+        """
+        self.save_all_mysql("fail")
+
+    def save_all_mysql(self, option):
+        """
+        更新FTP到MySQL
+        :param option: 更新方式见pandas的to_sql方法
         :return:
         """
         db_engine = create_engine(self.db.engine_all_para)
@@ -77,14 +85,13 @@ class DNATR:
             file_abs_path = self.local_path + file_name
             df = pd.read_csv(file_abs_path, encoding='gbk')
             df['测量时间'] = df['测量时间'].apply(trans_time, args=(table_name.split('_')[-1],))
-            df.to_sql(name=table_name, con=db_engine, if_exists="fail")
+            df.to_sql(name=table_name, con=db_engine, if_exists=option)
 
     def save_today_mysql(self):
         """
         将今天的文件下载并且保存至mysql
         :return:
         """
-
         db_engine = create_engine(self.db.engine_all_para)
         # 取得table_name = DN_ATR01_20200510这样的结果
         file_name = os.path.basename(self.today_local_file_abs)
@@ -107,7 +114,7 @@ class DNATR:
             for local_file_name in dwn_file_set:  # DN_ATR01_20200510.csv这样的结果
                 ftp_file_name = local_file_name.split('_')[-1]
                 self.get_file_from_ftp(self.ftp_path, ftp_file_name, self.local_path, local_file_name)
-                print("get{}".format(local_file_name)) # 获取的文件
+                print("get{}".format(local_file_name))  # 获取的文件
 
     def get_today_file_from_01(self):
         """

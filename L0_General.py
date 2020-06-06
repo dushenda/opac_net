@@ -21,7 +21,6 @@ from sqlalchemy import create_engine
 import pandas as pd
 
 import baseclass
-import basefun
 
 
 class GenePara:
@@ -64,7 +63,6 @@ class GenePara:
     def tosql_RSR_from_csv(self, path, table_name):
         df = pd.read_csv(path)
         self.tosql_cali(df, table_name)
-
 
 
 def main():

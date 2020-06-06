@@ -1,0 +1,47 @@
+@startuml
+L0_ATR.DNATR--*baseclass.FtpInfo:Composition
+L0_ATR.DNATR--*baseclass.SqlInfo:Composition
+
+class L0_ATR.DNATR {
+    {static} +today_ftp_file
+    {static} +today_local_file
+    {static} +today_local_file_abs
+    {static} +ftp_path
+    {static} +local_path
+    {static} +ins_num
+    +ftp
+    +db
+
+    +save_all_mysql_force()
+    +save_all_mysql_cmp()
+    +save_all_mysql(option)
+    +save_today_mysql()
+    +get_all_file()
+    +get_today_file_from_01()
+    +get_file_from_ftp(path_ftp, file_ftp, path_local, file_local)
+    +get_local_file_name(ftp_file_name)
+    +set_ins_num(self, ins_num)
+    +set_path(local_path)
+    -set_file_name()
+}
+
+class baseclass.FtpInfo{
+    +ftp_host
+    +ftp_usr
+    +ftp_psd
+
+    +set_para(self, host, usr, psd)
+}
+
+class baseclass.SqlInfo{
+    +db_driver
+    +db_usr
+    +db_psd
+    +db_host
+    +db_port
+    +db_name
+    +engine_all_para
+
+    +set_para(self, db_driver, db_usr, db_psd, db_host,db_port,db_name)
+}
+@enduml

@@ -48,7 +48,7 @@ class DNATR:
         self.db = baseclass.SqlInfo()
         self.set_ins_num(ins_num)
         self.set_path(local_path)
-        self.set_file_name()
+        self.__set_file_name()
 
     # 保存至MySQL，分为强制更新和比较更新两种force&cmp，使用函数为save_mysql_all
     def save_all_mysql_force(self):
@@ -155,7 +155,7 @@ class DNATR:
         self.local_path = local_path
         self.ftp_path = "ATR{}/".format(self.ins_num)
 
-    def set_file_name(self):
+    def __set_file_name(self):
         time_str = datetime.datetime.now().strftime("%Y%m%d")
         self.today_ftp_file = time_str + '.csv'
         self.today_local_file = 'DN_ATR' + self.ins_num + '_' + time_str + '.csv'

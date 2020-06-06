@@ -6,6 +6,7 @@
 
 使用csv文件导入数据库，改变列名可能会使得计算失败，因为存入数据库时候的读取表格列名为数据库中表格列名。
 
+使用的数据库为`General`，所有的表数据均在此数据库读写。
 ### ATR、PSR定标系数格式
 
 |band_wv|fac_value|
@@ -91,3 +92,15 @@ datetime=yyyymmddHHMM
 |:----:|:----:|
 |SatName_RSR|1nm响应函数|
 |SatName_RSR_25|2.5nm响应函数|
+
+## 方法
+### tosql_BRDF_from_csv(path,table_name)
+功能：读取BRDF的csv格式文件到数据库
+
+说明：path为csv文件所在路径（文件的完全路径），table_name为写入数据库后的表名
+### tosql_Ins_cali_from_csv(path,table_name)
+功能：读取仪器定标系数的csv格式文件到数据库
+
+说明：与`tosql_BRDF_from_csv(path,table_name)`参数含义一致，建议写为`ATR0x_Cali_Fac_yyyy_mm(All)`形式
+### tosql_RSR_from_csv(path,table_name)
+功能：读取响应函数

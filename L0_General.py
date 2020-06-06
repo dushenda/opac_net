@@ -29,7 +29,7 @@ class GenePara:
     def __str__(self):
         return "class General\ncali(ATR,PSR),BRDF,Ref,RSR set&get"
 
-    def tosql_cali(self, df, table_name):
+    def __tosql_cali(self, df, table_name):
         """
 
         :param df: pandas DataFrame
@@ -49,25 +49,27 @@ class GenePara:
         df = pd.read_csv(path)
         band_num = range(1, 9)
         df.insert(loc=0, column="band_num", value=band_num)
-        self.tosql_cali(df, table_name)
+        self.__tosql_cali(df, table_name)
 
     def tosql_BRDF_from_csv(self, path, table_name):
         df = pd.read_csv(path)
-        self.tosql_cali(df, table_name)
+        self.__tosql_cali(df, table_name)
 
     def tosql_Ref_from_csv(self, path):
         table_name = "ReferenceReflectance"
         df = pd.read_csv(path)
-        self.tosql_cali(df, table_name)
+        self.__tosql_cali(df, table_name)
 
     def tosql_RSR_from_csv(self, path, table_name):
         df = pd.read_csv(path)
-        self.tosql_cali(df, table_name)
+        self.__tosql_cali(df, table_name)
 
 
 def main():
     g = GenePara()
-    print(g)
+    path = './example/BRDF/BRDF_Model_Summer.csv'
+    table_name = 'test'
+    g.tosql_BRDF_from_csv(path, table_name)
     # read RSR to db
     # import os
     # path = "./example/RSR/"
